@@ -22,11 +22,18 @@ actor {
     author : Nickname;
     createdAt : Time.Time;
   };
+  public type PaymentConfirmation = {
+    nickname : Nickname;
+    transactionHash : Text;
+    submittedAt : Time.Time;
+    approved : Bool;
+  };
 
   // Persistent state - stable so data survives upgrades/redeployments
   stable var nicknameProfiles = Map.empty<Nickname, Profile>();
   stable var callerProfiles = Map.empty<Principal, Profile>();
   stable var legalContent = Map.empty<Nat, LegalContent>();
+  stable var paymentConfirmations = Map.empty<Text, PaymentConfirmation>();
 
   // Authorization component
   let accessControlState = AccessControl.initState();
@@ -72,6 +79,22 @@ actor {
       password = newPassword;
     };
     callerProfiles.add(caller, updatedProfile);
+  };
+
+  // Submit payment confirmation (transaction hash + nickname)
+  public shared ({ caller }) func submitPaymentConfirmation(nickname : Text, transactionHash : Text) : async () {
+    let confirmation : PaymentConfirmation = {
+      nickname;
+      transactionHash;
+      submittedAt = Time.now();
+      approved = false;
+    };
+    paymentConfirmations.add(transactionHash, confirmation);
+  };
+
+  // Get all payment confirmations (admin only)
+  public query ({ caller }) func getPaymentConfirmations() : async [PaymentConfirmation] {
+    paymentConfirmations.values().toArray();
   };
 
   // Legal content endpoints

@@ -17,6 +17,12 @@ export interface LegalContent {
   'createdAt' : Time,
   'author' : Nickname,
 }
+export interface PaymentConfirmation {
+  'nickname' : Nickname,
+  'transactionHash' : string,
+  'submittedAt' : Time,
+  'approved' : boolean,
+}
 export type Nickname = string;
 export type PasswordHash = string;
 export interface Profile { 'nickname' : Nickname, 'password' : PasswordHash }
@@ -35,6 +41,8 @@ export interface _SERVICE {
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'login' : ActorMethod<[string, PasswordHash], boolean>,
   'register' : ActorMethod<[string, PasswordHash], undefined>,
+  'submitPaymentConfirmation' : ActorMethod<[string, string], undefined>,
+  'getPaymentConfirmations' : ActorMethod<[], Array<PaymentConfirmation>>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

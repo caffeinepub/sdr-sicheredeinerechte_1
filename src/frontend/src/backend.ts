@@ -119,6 +119,8 @@ export interface backendInterface {
     isCallerAdmin(): Promise<boolean>;
     login(nickname: string, password: PasswordHash): Promise<boolean>;
     register(nickname: string, password: PasswordHash): Promise<void>;
+    submitPaymentConfirmation(nickname: string, transactionHash: string): Promise<void>;
+    getPaymentConfirmations(): Promise<Array<{nickname: string; transactionHash: string; submittedAt: bigint; approved: boolean}>>;
 }
 import type { LegalContent as _LegalContent, Profile as _Profile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
@@ -261,6 +263,34 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.register(arg0, arg1);
             return result;
+        }
+    }
+    async submitPaymentConfirmation(arg0: string, arg1: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.submitPaymentConfirmation(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.submitPaymentConfirmation(arg0, arg1);
+            return result;
+        }
+    }
+    async getPaymentConfirmations(): Promise<Array<{nickname: string; transactionHash: string; submittedAt: bigint; approved: boolean}>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPaymentConfirmations();
+                return result as any;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPaymentConfirmations();
+            return result as any;
         }
     }
 }

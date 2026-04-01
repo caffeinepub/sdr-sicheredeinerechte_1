@@ -70,7 +70,10 @@ export function HomePage() {
       style={{ fontFamily: sansFont }}
     >
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
-        <div className="container mx-auto px-4 h-24 flex items-center justify-between">
+        <div
+          className="w-full h-24 flex items-center justify-between"
+          style={{ paddingLeft: "4cm", paddingRight: "4cm" }}
+        >
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2">
               <Shield className="h-12 w-12 text-yellow-400" />
@@ -104,7 +107,10 @@ export function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-secondary/50 to-background pointer-events-none" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
 
-          <div className="relative container mx-auto px-4 py-20 max-w-5xl">
+          <div
+            className="relative w-full py-20"
+            style={{ paddingLeft: "7cm", paddingRight: "7cm" }}
+          >
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}

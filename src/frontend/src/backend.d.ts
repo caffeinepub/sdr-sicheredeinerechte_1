@@ -1,39 +1,40 @@
-import type { Principal } from "@icp-sdk/core/principal";
-export interface Some<T> {
-    __kind__: "Some";
-    value: T;
-}
-export interface None {
-    __kind__: "None";
-}
-export type Option<T> = Some<T> | None;
-export type PasswordHash = string;
+import type { ActorSubclass } from "@dfinity/agent";
+import type { IDL } from "@dfinity/candid";
+
 export interface Profile {
-    nickname: Nickname;
-    password: PasswordHash;
+  nickname: string;
+  password: string;
 }
-export type Time = bigint;
-export type Nickname = string;
+
 export interface LegalContent {
-    id: bigint;
-    title: string;
-    body: string;
-    createdAt: Time;
-    author: Nickname;
+  id: bigint;
+  title: string;
+  body: string;
+  author: string;
+  createdAt: bigint;
 }
-export enum UserRole {
-    admin = "admin",
-    user = "user",
-    guest = "guest"
+
+export interface PaymentConfirmation {
+  nickname: string;
+  transactionHash: string;
+  submittedAt: bigint;
+  approved: boolean;
 }
-export interface backendInterface {
-    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
-    changePassword(callerProfile: Profile, newPassword: PasswordHash): Promise<void>;
-    getAllLegalContent(): Promise<Array<LegalContent>>;
-    getCallerUserRole(): Promise<UserRole>;
-    getLegalContentById(contentId: bigint): Promise<LegalContent | null>;
-    getMemberContent(): Promise<Profile | null>;
-    isCallerAdmin(): Promise<boolean>;
-    login(nickname: string, password: PasswordHash): Promise<boolean>;
-    register(nickname: string, password: PasswordHash): Promise<void>;
+
+export interface _SERVICE {
+  register: (nickname: string, password: string) => Promise<undefined>;
+  login: (nickname: string, password: string) => Promise<boolean>;
+  getMemberContent: () => Promise<[] | [Profile]>;
+  changePassword: (profile: Profile, newPassword: string) => Promise<undefined>;
+  submitPaymentConfirmation: (nickname: string, transactionHash: string) => Promise<undefined>;
+  getPaymentConfirmations: () => Promise<PaymentConfirmation[]>;
+  getAllLegalContent: () => Promise<LegalContent[]>;
+  getLegalContentById: (id: bigint) => Promise<[] | [LegalContent]>;
 }
+
+export declare const idlFactory: IDL.InterfaceFactory;
+export declare const canisterId: string;
+export declare function createActor(
+  canisterId: string,
+  options?: { agentOptions?: import("@dfinity/agent").HttpAgentOptions }
+): ActorSubclass<_SERVICE>;

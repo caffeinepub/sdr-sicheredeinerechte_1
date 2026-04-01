@@ -27,6 +27,12 @@ export const LegalContent = IDL.Record({
   'createdAt' : Time,
   'author' : Nickname,
 });
+export const PaymentConfirmation = IDL.Record({
+  'nickname' : Nickname,
+  'transactionHash' : IDL.Text,
+  'submittedAt' : Time,
+  'approved' : IDL.Bool,
+});
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
@@ -34,15 +40,13 @@ export const idlService = IDL.Service({
   'changePassword' : IDL.Func([Profile, PasswordHash], [], []),
   'getAllLegalContent' : IDL.Func([], [IDL.Vec(LegalContent)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getLegalContentById' : IDL.Func(
-      [IDL.Nat],
-      [IDL.Opt(LegalContent)],
-      ['query'],
-    ),
+  'getLegalContentById' : IDL.Func([IDL.Nat], [IDL.Opt(LegalContent)], ['query']),
   'getMemberContent' : IDL.Func([], [IDL.Opt(Profile)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'login' : IDL.Func([IDL.Text, PasswordHash], [IDL.Bool], ['query']),
   'register' : IDL.Func([IDL.Text, PasswordHash], [], []),
+  'submitPaymentConfirmation' : IDL.Func([IDL.Text, IDL.Text], [], []),
+  'getPaymentConfirmations' : IDL.Func([], [IDL.Vec(PaymentConfirmation)], ['query']),
 });
 
 export const idlInitArgs = [];
@@ -67,6 +71,12 @@ export const idlFactory = ({ IDL }) => {
     'createdAt' : Time,
     'author' : Nickname,
   });
+  const PaymentConfirmation = IDL.Record({
+    'nickname' : Nickname,
+    'transactionHash' : IDL.Text,
+    'submittedAt' : Time,
+    'approved' : IDL.Bool,
+  });
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
@@ -74,15 +84,13 @@ export const idlFactory = ({ IDL }) => {
     'changePassword' : IDL.Func([Profile, PasswordHash], [], []),
     'getAllLegalContent' : IDL.Func([], [IDL.Vec(LegalContent)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getLegalContentById' : IDL.Func(
-        [IDL.Nat],
-        [IDL.Opt(LegalContent)],
-        ['query'],
-      ),
+    'getLegalContentById' : IDL.Func([IDL.Nat], [IDL.Opt(LegalContent)], ['query']),
     'getMemberContent' : IDL.Func([], [IDL.Opt(Profile)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'login' : IDL.Func([IDL.Text, PasswordHash], [IDL.Bool], ['query']),
     'register' : IDL.Func([IDL.Text, PasswordHash], [], []),
+    'submitPaymentConfirmation' : IDL.Func([IDL.Text, IDL.Text], [], []),
+    'getPaymentConfirmations' : IDL.Func([], [IDL.Vec(PaymentConfirmation)], ['query']),
   });
 };
 
