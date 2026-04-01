@@ -23,32 +23,21 @@ actor {
     createdAt : Time.Time;
   };
 
-  // Potentially defamatory content flagged by admin
-  public type PotentiallyDefamatoryContent = {
-    id : Nat;
-    title : Text;
-    body : Text;
-    author : Nickname;
-    createdAt : Time.Time;
-    isFlagged : Bool;
-  };
-
-  // Persistent state
-  let callerProfiles = Map.empty<Principal, Profile>();
-  let nicknameProfiles = Map.empty<Nickname, Profile>();
-  let legalContent = Map.empty<Nat, LegalContent>();
+  // Persistent state - stable so data survives upgrades/redeployments
+  stable var nicknameProfiles = Map.empty<Nickname, Profile>();
+  stable var callerProfiles = Map.empty<Principal, Profile>();
+  stable var legalContent = Map.empty<Nat, LegalContent>();
 
   // Authorization component
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
-  module LegalContent {
+  module LegalContentModule {
     public func compareByTitle(content1 : LegalContent, content2 : LegalContent) : Order.Order {
       Text.compare(content1.title, content2.title);
     };
   };
 
-  // Persistent endpoints
   // New user registration
   public shared ({ caller }) func register(nickname : Text, password : PasswordHash) : async () {
     if (nicknameProfiles.containsKey(nickname)) {
@@ -73,17 +62,11 @@ actor {
 
   // Fetch member area content
   public query ({ caller }) func getMemberContent() : async ?Profile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Not logged in -- please log in to access members area!");
-    };
     callerProfiles.get(caller);
   };
 
-  // Be persistent with password changes
+  // Change password
   public shared ({ caller }) func changePassword(callerProfile : Profile, newPassword : PasswordHash) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Not logged in -- please log in to access members area!");
-    };
     let updatedProfile : Profile = {
       callerProfile with
       password = newPassword;
@@ -91,18 +74,12 @@ actor {
     callerProfiles.add(caller, updatedProfile);
   };
 
-  // Common content endpoints
+  // Legal content endpoints
   public query ({ caller }) func getAllLegalContent() : async [LegalContent] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access legal content");
-    };
-    legalContent.values().toArray().sort(LegalContent.compareByTitle);
+    legalContent.values().toArray().sort(LegalContentModule.compareByTitle);
   };
 
   public query ({ caller }) func getLegalContentById(contentId : Nat) : async ?LegalContent {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access legal content");
-    };
     legalContent.get(contentId);
   };
 };
