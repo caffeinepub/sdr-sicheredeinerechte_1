@@ -30,7 +30,7 @@ export function AuthModal({
   open,
   onOpenChange,
 }: AuthModalProps) {
-  const { actor } = useActor();
+  const { actor, isFetching } = useActor();
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -45,7 +45,12 @@ export function AuthModal({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!actor) return;
+    if (!actor) {
+      toast.error(
+        "Verbindung zum Server wird noch aufgebaut. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      );
+      return;
+    }
     setLoginLoading(true);
     try {
       const hashed = await hashPassword(loginPass);
@@ -55,10 +60,13 @@ export function AuthModal({
         onOpenChange?.(false);
         navigate({ to: "/members" });
       } else {
-        toast.error("Ungültiger Benutzername oder Passwort.");
+        toast.error(
+          "Ungültiger Benutzername oder Passwort. Falls Sie noch kein Konto haben, registrieren Sie sich bitte.",
+        );
       }
-    } catch {
-      toast.error("Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      toast.error(`Anmeldung fehlgeschlagen: ${msg}`);
     } finally {
       setLoginLoading(false);
     }
@@ -66,7 +74,12 @@ export function AuthModal({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!actor) return;
+    if (!actor) {
+      toast.error(
+        "Verbindung zum Server wird noch aufgebaut. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      );
+      return;
+    }
     if (regPass !== regConfirm) {
       toast.error("Passwörter stimmen nicht überein.");
       return;
@@ -83,14 +96,21 @@ export function AuthModal({
       onOpenChange?.(false);
       navigate({ to: "/members" });
       toast.success("Willkommen bei SDR!");
-    } catch {
-      toast.error(
-        "Registrierung fehlgeschlagen. Benutzername möglicherweise vergeben.",
-      );
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes("already exists") || msg.includes("Nickname already")) {
+        toast.error(
+          "Dieser Benutzername ist bereits vergeben. Bitte wählen Sie einen anderen.",
+        );
+      } else {
+        toast.error(`Registrierung fehlgeschlagen: ${msg}`);
+      }
     } finally {
       setRegLoading(false);
     }
   };
+
+  const isActorReady = !!actor && !isFetching;
 
   const content = (
     <DialogContent
@@ -102,6 +122,14 @@ export function AuthModal({
           SDR – SichereDeineRechte
         </DialogTitle>
       </DialogHeader>
+
+      {!isActorReady && (
+        <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>Verbindung wird hergestellt...</span>
+        </div>
+      )}
+
       <Tabs defaultValue={defaultTab} className="mt-2">
         <TabsList className="w-full bg-secondary">
           <TabsTrigger
@@ -154,13 +182,17 @@ export function AuthModal({
             <Button
               type="submit"
               className="w-full h-12 text-base"
-              disabled={loginLoading}
+              disabled={loginLoading || !isActorReady}
               data-ocid="auth.submit_button"
             >
-              {loginLoading ? (
+              {loginLoading || !isActorReady ? (
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
               ) : null}
-              {loginLoading ? "Anmelden..." : "Anmelden"}
+              {loginLoading
+                ? "Anmelden..."
+                : !isActorReady
+                  ? "Verbinde..."
+                  : "Anmelden"}
             </Button>
           </form>
         </TabsContent>
@@ -214,13 +246,17 @@ export function AuthModal({
             <Button
               type="submit"
               className="w-full h-12 text-base"
-              disabled={regLoading}
+              disabled={regLoading || !isActorReady}
               data-ocid="auth.submit_button"
             >
-              {regLoading ? (
+              {regLoading || !isActorReady ? (
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
               ) : null}
-              {regLoading ? "Registrieren..." : "Konto erstellen"}
+              {regLoading
+                ? "Registrieren..."
+                : !isActorReady
+                  ? "Verbinde..."
+                  : "Konto erstellen"}
             </Button>
           </form>
         </TabsContent>
