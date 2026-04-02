@@ -30,6 +30,7 @@ export const LegalContent = IDL.Record({
 export const PaymentConfirmation = IDL.Record({
   'nickname' : Nickname,
   'transactionHash' : IDL.Text,
+  'cryptocurrency' : IDL.Text,
   'submittedAt' : Time,
   'approved' : IDL.Bool,
 });
@@ -45,8 +46,9 @@ export const idlService = IDL.Service({
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'login' : IDL.Func([IDL.Text, PasswordHash], [IDL.Bool], ['query']),
   'register' : IDL.Func([IDL.Text, PasswordHash], [], []),
-  'submitPaymentConfirmation' : IDL.Func([IDL.Text, IDL.Text], [], []),
+  'submitPaymentConfirmation' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
   'getPaymentConfirmations' : IDL.Func([], [IDL.Vec(PaymentConfirmation)], ['query']),
+  'getRegistrationCount' : IDL.Func([], [IDL.Nat], ['query']),
 });
 
 export const idlInitArgs = [];
@@ -74,6 +76,7 @@ export const idlFactory = ({ IDL }) => {
   const PaymentConfirmation = IDL.Record({
     'nickname' : Nickname,
     'transactionHash' : IDL.Text,
+    'cryptocurrency' : IDL.Text,
     'submittedAt' : Time,
     'approved' : IDL.Bool,
   });
@@ -89,8 +92,9 @@ export const idlFactory = ({ IDL }) => {
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'login' : IDL.Func([IDL.Text, PasswordHash], [IDL.Bool], ['query']),
     'register' : IDL.Func([IDL.Text, PasswordHash], [], []),
-    'submitPaymentConfirmation' : IDL.Func([IDL.Text, IDL.Text], [], []),
+    'submitPaymentConfirmation' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
     'getPaymentConfirmations' : IDL.Func([], [IDL.Vec(PaymentConfirmation)], ['query']),
+    'getRegistrationCount' : IDL.Func([], [IDL.Nat], ['query']),
   });
 };
 
