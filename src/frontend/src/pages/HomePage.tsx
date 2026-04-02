@@ -175,7 +175,7 @@ export function HomePage() {
                   <span className="text-yellow-400">SDR</span>
                   <span className="text-white/80 font-normal">
                     {" "}
-                    \u2013 SichereDeineRechte{" "}
+                    SichereDeineRechte{" "}
                   </span>
                   <span className="text-white/80 font-bold">an.</span>
                 </p>
@@ -214,8 +214,9 @@ export function HomePage() {
                   color: "#FFD700",
                 }}
               >
-                \u201eMann kann den Wind nicht \u00e4ndern, aber die Segel
-                anders setzen.\u201c
+                {
+                  "\u201eMann kann den Wind nicht \u00e4ndern, aber die Segel anders setzen.\u201c"
+                }
               </p>
               <p
                 className="mt-2"
