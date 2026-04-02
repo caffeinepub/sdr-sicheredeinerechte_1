@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { AuthModal } from "../components/AuthModal";
 import { useAuth } from "../context/AuthContext";
+import { AdminPage } from "./AdminPage";
 
 const heroText1 =
   "Fühlen Sie sich von Forderungen sogenannter Behörden oder Ämter unter Druck gesetzt? Fragen Sie sich, ob diese Ansprüche überhaupt rechtmäßig sind? Reagieren Sie noch – oder agieren Sie schon bewusst und informiert? Ist Ihnen klar, dass Sie durch gezieltes Agieren die Verantwortlichen hinter solchen Forderungen in die Haftung nehmen können? Möchten Sie wissen, wie Sie eine Zahlung leisten können, ohne dabei Ihre Rechte aufzugeben? Suchen Sie nach einer Möglichkeit, unter Vorbehalt zu handeln, ohne sich unwissentlich zu verpflichten? Und stellen Sie sich die entscheidende Frage: Gibt es einen sicheren Weg, mit solchen Forderungen umzugehen, ohne Nachteile zu riskieren?";
@@ -28,6 +29,7 @@ export function HomePage() {
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const [adminError, setAdminError] = useState("");
+  const [adminAuthenticated, setAdminAuthenticated] = useState(false);
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
@@ -52,7 +54,7 @@ export function HomePage() {
       setAdminModalOpen(false);
       setAdminPassword("");
       setAdminError("");
-      alert("Admin-Bereich: Zugang gewährt.");
+      setAdminAuthenticated(true);
     } else {
       setAdminError("Falsches Passwort. Bitte erneut versuchen.");
     }
@@ -327,6 +329,10 @@ export function HomePage() {
         onOpenChange={setRegisterModalOpen}
         defaultTab="register"
       />
+
+      {adminAuthenticated && (
+        <AdminPage onClose={() => setAdminAuthenticated(false)} />
+      )}
 
       {adminModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">

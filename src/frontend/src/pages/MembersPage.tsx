@@ -201,6 +201,7 @@ function ZahlungPage({
   const { actor } = useActor();
   const [txHash, setTxHash] = useState("");
   const [submittedNickname, setSubmittedNickname] = useState(nickname);
+  const [selectedCrypto, setSelectedCrypto] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -210,10 +211,18 @@ function ZahlungPage({
       toast.error("Bitte füllen Sie alle Felder aus.");
       return;
     }
+    if (!selectedCrypto) {
+      toast.error("Bitte wählen Sie Ihre verwendete Kryptowährung aus.");
+      return;
+    }
     setIsSubmitting(true);
     try {
       if (actor) {
-        await actor.submitPaymentConfirmation(submittedNickname, txHash);
+        await actor.submitPaymentConfirmation(
+          submittedNickname,
+          txHash,
+          selectedCrypto,
+        );
       }
       setSubmitted(true);
       toast.success("Ihre Bestätigung wurde erfolgreich übermittelt.");
@@ -280,6 +289,65 @@ function ZahlungPage({
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Instruction sentence */}
+                <p
+                  className="text-foreground/85 leading-relaxed"
+                  style={{ fontFamily: sansFont, fontSize: "1.1rem" }}
+                >
+                  Nach der Überweisung wählen Sie bitte Ihre verwendete
+                  Kryptowährung aus und geben Ihren Transaktions-Hash ein.
+                </p>
+
+                {/* Crypto selector */}
+                <div>
+                  <p
+                    className="block font-semibold text-foreground mb-2"
+                    style={{ fontFamily: sansFont, fontSize: "1.1rem" }}
+                  >
+                    Kryptowährung
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {CRYPTO_LIST.map((crypto) => (
+                      <button
+                        key={crypto.symbol}
+                        type="button"
+                        onClick={() => setSelectedCrypto(crypto.symbol)}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all font-semibold"
+                        style={{
+                          fontFamily: sansFont,
+                          fontSize: "1rem",
+                          borderColor:
+                            selectedCrypto === crypto.symbol
+                              ? crypto.color
+                              : "rgba(255,255,255,0.15)",
+                          backgroundColor:
+                            selectedCrypto === crypto.symbol
+                              ? `${crypto.color}22`
+                              : "rgba(255,255,255,0.04)",
+                          color:
+                            selectedCrypto === crypto.symbol
+                              ? crypto.color
+                              : "#ccc",
+                        }}
+                      >
+                        <span
+                          className="w-7 h-7 flex items-center justify-center rounded-full text-base font-bold"
+                          style={{
+                            backgroundColor: crypto.color,
+                            color: "#fff",
+                          }}
+                        >
+                          {crypto.logo}
+                        </span>
+                        {crypto.symbol}
+                        {selectedCrypto === crypto.symbol && (
+                          <Check className="h-4 w-4" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div>
                   <label
                     htmlFor="nickname-field"

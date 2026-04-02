@@ -17,6 +17,7 @@ export interface LegalContent {
 export interface PaymentConfirmation {
   nickname: string;
   transactionHash: string;
+  cryptocurrency: string;
   submittedAt: bigint;
   approved: boolean;
 }
@@ -26,8 +27,9 @@ export interface _SERVICE {
   login: (nickname: string, password: string) => Promise<boolean>;
   getMemberContent: () => Promise<[] | [Profile]>;
   changePassword: (profile: Profile, newPassword: string) => Promise<undefined>;
-  submitPaymentConfirmation: (nickname: string, transactionHash: string) => Promise<undefined>;
+  submitPaymentConfirmation: (nickname: string, transactionHash: string, cryptocurrency: string) => Promise<undefined>;
   getPaymentConfirmations: () => Promise<PaymentConfirmation[]>;
+  getRegistrationCount: () => Promise<bigint>;
   getAllLegalContent: () => Promise<LegalContent[]>;
   getLegalContentById: (id: bigint) => Promise<[] | [LegalContent]>;
 }

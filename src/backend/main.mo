@@ -22,9 +22,19 @@ actor {
     author : Nickname;
     createdAt : Time.Time;
   };
+
+  // Legacy type without cryptocurrency field (for migration)
+  type PaymentConfirmationV1 = {
+    nickname : Nickname;
+    transactionHash : Text;
+    submittedAt : Time.Time;
+    approved : Bool;
+  };
+
   public type PaymentConfirmation = {
     nickname : Nickname;
     transactionHash : Text;
+    cryptocurrency : Text;
     submittedAt : Time.Time;
     approved : Bool;
   };
@@ -33,11 +43,29 @@ actor {
   stable var nicknameProfiles = Map.empty<Nickname, Profile>();
   stable var callerProfiles = Map.empty<Principal, Profile>();
   stable var legalContent = Map.empty<Nat, LegalContent>();
-  stable var paymentConfirmations = Map.empty<Text, PaymentConfirmation>();
+  // Legacy stable var kept under original name so existing data is preserved on upgrade
+  stable var paymentConfirmations = Map.empty<Text, PaymentConfirmationV1>();
+  // New stable var with cryptocurrency field
+  stable var paymentConfirmationsV2 = Map.empty<Text, PaymentConfirmation>();
+  stable var registrationCount : Nat = 0;
 
   // Authorization component
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
+
+  // Migrate legacy payment confirmations to V2 on upgrade
+  system func postupgrade() {
+    for ((k, v) in paymentConfirmations.entries()) {
+      paymentConfirmationsV2.add(k, {
+        nickname = v.nickname;
+        transactionHash = v.transactionHash;
+        cryptocurrency = "";
+        submittedAt = v.submittedAt;
+        approved = v.approved;
+      });
+    };
+    paymentConfirmations := Map.empty<Text, PaymentConfirmationV1>();
+  };
 
   module LegalContentModule {
     public func compareByTitle(content1 : LegalContent, content2 : LegalContent) : Order.Order {
@@ -55,6 +83,7 @@ actor {
       password;
     };
     nicknameProfiles.add(nickname, profile);
+    registrationCount += 1;
   };
 
   // Login function for users
@@ -81,20 +110,26 @@ actor {
     callerProfiles.add(caller, updatedProfile);
   };
 
-  // Submit payment confirmation (transaction hash + nickname)
-  public shared ({ caller }) func submitPaymentConfirmation(nickname : Text, transactionHash : Text) : async () {
+  // Submit payment confirmation (transaction hash + nickname + cryptocurrency)
+  public shared ({ caller }) func submitPaymentConfirmation(nickname : Text, transactionHash : Text, cryptocurrency : Text) : async () {
     let confirmation : PaymentConfirmation = {
       nickname;
       transactionHash;
+      cryptocurrency;
       submittedAt = Time.now();
       approved = false;
     };
-    paymentConfirmations.add(transactionHash, confirmation);
+    paymentConfirmationsV2.add(transactionHash, confirmation);
   };
 
   // Get all payment confirmations (admin only)
   public query ({ caller }) func getPaymentConfirmations() : async [PaymentConfirmation] {
-    paymentConfirmations.values().toArray();
+    paymentConfirmationsV2.values().toArray();
+  };
+
+  // Get registration count
+  public query ({ caller }) func getRegistrationCount() : async Nat {
+    registrationCount;
   };
 
   // Legal content endpoints
