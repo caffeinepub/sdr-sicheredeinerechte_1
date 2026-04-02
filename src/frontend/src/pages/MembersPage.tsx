@@ -25,35 +25,35 @@ const CRYPTO_LIST = [
     name: "Internet Computer",
     address: "3pno5-fmoey-3jsyu-6p5qb-6egd7-zg445-sfdtc-3cpzh-qn5sh-wcgx6-cae",
     color: "#3B00B9",
-    logo: "∞",
+    logo: "\u221e",
   },
   {
     symbol: "BTC",
     name: "Bitcoin",
     address: "bc1qzt9eeuh35jc9746z0jk73dmj77gd5sp6fuc9wd",
     color: "#F7931A",
-    logo: "₿",
+    logo: "\u20bf",
   },
   {
     symbol: "ETH",
     name: "Ethereum",
     address: "0x3c2726B86B4BB25Eb39Cd58636b8f8f6a5286ae3",
     color: "#627EEA",
-    logo: "Ξ",
+    logo: "\u039e",
   },
   {
     symbol: "XRP",
     name: "XRP",
     address: "rNxb49FgcRQVDjioZ6Jfk6vky5ViByNkW9",
     color: "#00AAE4",
-    logo: "✕",
+    logo: "\u2715",
   },
   {
     symbol: "SOL",
     name: "Solana",
     address: "kjFvmwSexVSufg4wu859rY7SuiqeoThQzPamPef2QLR",
     color: "#9945FF",
-    logo: "◎",
+    logo: "\u25ce",
   },
 ];
 
@@ -82,16 +82,25 @@ function CryptoCard({ crypto }: { crypto: (typeof CRYPTO_LIST)[0] }) {
           {crypto.logo}
         </span>
         <div>
-          <span className="font-bold text-foreground text-lg">
+          <span
+            className="font-bold text-foreground"
+            style={{ fontSize: "1.6875rem" }}
+          >
             {crypto.name}
           </span>
-          <span className="ml-2 text-muted-foreground text-sm">
+          <span
+            className="ml-2 text-muted-foreground"
+            style={{ fontSize: "1.3125rem" }}
+          >
             ({crypto.symbol})
           </span>
         </div>
       </div>
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-sm break-all text-foreground/80 flex-1 font-mono">
+        <span
+          className="break-all text-foreground/80 flex-1 font-mono"
+          style={{ fontSize: "1.3125rem" }}
+        >
           {crypto.address}
         </span>
         <button
@@ -110,7 +119,8 @@ function CryptoCard({ crypto }: { crypto: (typeof CRYPTO_LIST)[0] }) {
       <button
         type="button"
         onClick={() => setQrOpen(!qrOpen)}
-        className="flex items-center gap-2 text-sm text-primary hover:underline"
+        className="flex items-center gap-2 text-primary hover:underline"
+        style={{ fontSize: "1.3125rem" }}
       >
         {qrOpen ? (
           <ChevronUp className="h-4 w-4" />
@@ -123,7 +133,7 @@ function CryptoCard({ crypto }: { crypto: (typeof CRYPTO_LIST)[0] }) {
         <div className="mt-3 flex justify-center">
           <img
             src={qrUrl}
-            alt={`QR-Code für ${crypto.name}`}
+            alt={`QR-Code f\u00fcr ${crypto.name}`}
             width={200}
             height={200}
             className="rounded-lg border border-border"
@@ -180,7 +190,7 @@ function PageFooter() {
         className="container mx-auto px-4 text-center text-muted-foreground text-sm"
         style={{ fontFamily: sansFont }}
       >
-        © {new Date().getFullYear()}. Built with love using{" "}
+        \u00a9 {new Date().getFullYear()}. Built with love using{" "}
         <a
           href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
           target="_blank"
@@ -208,11 +218,13 @@ function ZahlungPage({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!txHash.trim() || !submittedNickname.trim()) {
-      toast.error("Bitte füllen Sie alle Felder aus.");
+      toast.error("Bitte f\u00fcllen Sie alle Felder aus.");
       return;
     }
     if (!selectedCrypto) {
-      toast.error("Bitte wählen Sie Ihre verwendete Kryptowährung aus.");
+      toast.error(
+        "Bitte w\u00e4hlen Sie Ihre verwendete Kryptow\u00e4hrung aus.",
+      );
       return;
     }
     setIsSubmitting(true);
@@ -225,10 +237,12 @@ function ZahlungPage({
         );
       }
       setSubmitted(true);
-      toast.success("Ihre Bestätigung wurde erfolgreich übermittelt.");
+      toast.success(
+        "Ihre Best\u00e4tigung wurde erfolgreich \u00fcbermittelt.",
+      );
     } catch {
       toast.error(
-        "Übermittlung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+        "\u00dcbermittlung fehlgeschlagen. Bitte versuchen Sie es erneut.",
       );
     } finally {
       setIsSubmitting(false);
@@ -240,7 +254,7 @@ function ZahlungPage({
       className="min-h-screen flex flex-col bg-background"
       style={{ fontFamily: sansFont }}
     >
-      <PageHeader onAction={onBack} actionLabel="Zurück" />
+      <PageHeader onAction={onBack} actionLabel="Zur\u00fcck" />
       <main
         className="flex-1 w-full py-12"
         style={{ paddingLeft: "7cm", paddingRight: "7cm" }}
@@ -260,10 +274,10 @@ function ZahlungPage({
             className="mb-8 text-foreground/85 leading-relaxed"
             style={{ fontFamily: sansFont, fontSize: "1.625rem" }}
           >
-            Überweisen Sie den geforderten Ausgleich in einer der unterstützten
-            Kryptowährungen an die unten angegebene Adresse. Geben Sie
-            anschließend Ihren Transaktions-Hash ein, damit wir Ihren Ausgleich
-            bestätigen können.
+            \u00dcberweisen Sie den geforderten Ausgleich in einer der
+            unterst\u00fctzten Kryptow\u00e4hrungen an die unten angegebene
+            Adresse. Geben Sie anschlie\u00dfend Ihren Transaktions-Hash ein,
+            damit wir Ihren Ausgleich best\u00e4tigen k\u00f6nnen.
           </p>
           <div className="mb-10">
             {CRYPTO_LIST.map((crypto) => (
@@ -276,35 +290,33 @@ function ZahlungPage({
           >
             <h2
               className="font-bold mb-4"
-              style={{ fontFamily: sansFont, fontSize: "1.625rem" }}
+              style={{ fontFamily: sansFont, fontSize: "2.4375rem" }}
             >
-              Ausgleich bestätigen
+              Ausgleich best\u00e4tigen
             </h2>
             {submitted ? (
               <div className="flex items-center gap-3 text-green-400">
                 <Check className="h-6 w-6" />
                 <p style={{ fontFamily: sansFont, fontSize: "1.25rem" }}>
-                  Ihre Bestätigung wurde erfolgreich übermittelt.
+                  Ihre Best\u00e4tigung wurde erfolgreich \u00fcbermittelt.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Instruction sentence */}
                 <p
                   className="text-foreground/85 leading-relaxed"
-                  style={{ fontFamily: sansFont, fontSize: "1.1rem" }}
+                  style={{ fontFamily: sansFont, fontSize: "1.65rem" }}
                 >
-                  Nach der Überweisung wählen Sie bitte Ihre verwendete
-                  Kryptowährung aus und geben Ihren Transaktions-Hash ein.
+                  Nach der \u00dcberweisung w\u00e4hlen Sie bitte Ihre
+                  verwendete Kryptow\u00e4hrung aus und geben Ihren
+                  Transaktions-Hash ein.
                 </p>
-
-                {/* Crypto selector */}
                 <div>
                   <p
                     className="block font-semibold text-foreground mb-2"
-                    style={{ fontFamily: sansFont, fontSize: "1.1rem" }}
+                    style={{ fontFamily: sansFont, fontSize: "1.65rem" }}
                   >
-                    Kryptowährung
+                    Kryptow\u00e4hrung
                   </p>
                   <div className="flex flex-wrap gap-3">
                     {CRYPTO_LIST.map((crypto) => (
@@ -315,7 +327,7 @@ function ZahlungPage({
                         className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all font-semibold"
                         style={{
                           fontFamily: sansFont,
-                          fontSize: "1rem",
+                          fontSize: "1.5rem",
                           borderColor:
                             selectedCrypto === crypto.symbol
                               ? crypto.color
@@ -331,10 +343,12 @@ function ZahlungPage({
                         }}
                       >
                         <span
-                          className="w-7 h-7 flex items-center justify-center rounded-full text-base font-bold"
+                          className="flex items-center justify-center rounded-full text-base font-bold"
                           style={{
                             backgroundColor: crypto.color,
                             color: "#fff",
+                            width: "2.625rem",
+                            height: "2.625rem",
                           }}
                         >
                           {crypto.logo}
@@ -347,12 +361,11 @@ function ZahlungPage({
                     ))}
                   </div>
                 </div>
-
                 <div>
                   <label
                     htmlFor="nickname-field"
-                    className="block text-sm font-semibold text-foreground/80 mb-1"
-                    style={{ fontFamily: sansFont }}
+                    className="block font-semibold text-foreground/80 mb-1"
+                    style={{ fontFamily: sansFont, fontSize: "1.3125rem" }}
                   >
                     Ihr Nickname
                   </label>
@@ -361,16 +374,16 @@ function ZahlungPage({
                     type="text"
                     value={submittedNickname}
                     onChange={(e) => setSubmittedNickname(e.target.value)}
-                    className="w-full border border-border rounded-lg px-4 py-3 text-base bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                    style={{ fontFamily: sansFont }}
+                    className="w-full border border-border rounded-lg px-4 py-3 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    style={{ fontFamily: sansFont, fontSize: "1.5rem" }}
                     required
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="txhash-field"
-                    className="block text-sm font-semibold text-foreground/80 mb-1"
-                    style={{ fontFamily: sansFont }}
+                    className="block font-semibold text-foreground/80 mb-1"
+                    style={{ fontFamily: sansFont, fontSize: "1.3125rem" }}
                   >
                     Transaktions-Hash
                   </label>
@@ -380,8 +393,8 @@ function ZahlungPage({
                     value={txHash}
                     onChange={(e) => setTxHash(e.target.value)}
                     placeholder="Ihren Transaktions-Hash hier eingeben..."
-                    className="w-full border border-border rounded-lg px-4 py-3 text-base bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono"
-                    style={{ fontFamily: sansFont }}
+                    className="w-full border border-border rounded-lg px-4 py-3 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono"
+                    style={{ fontFamily: sansFont, fontSize: "1.5rem" }}
                     required
                   />
                 </div>
@@ -392,8 +405,8 @@ function ZahlungPage({
                   style={{ backgroundColor: oceanBlue, fontFamily: sansFont }}
                 >
                   {isSubmitting
-                    ? "Wird übermittelt..."
-                    : "Ausgleich bestätigen"}
+                    ? "Wird \u00fcbermittelt..."
+                    : "Ausgleich best\u00e4tigen"}
                 </Button>
               </form>
             )}
@@ -406,7 +419,7 @@ function ZahlungPage({
               color: lightGrey7035,
             }}
           >
-            Nach Bestätigung Ihres Ausgleichs erhalten Sie innerhalb von 24
+            Nach Best\u00e4tigung Ihres Ausgleichs erhalten Sie innerhalb von 24
             Stunden Zugang zu den Musterschreiben.
           </p>
         </motion.div>
@@ -426,7 +439,7 @@ function MusterschreibenPage({
       className="min-h-screen flex flex-col bg-background"
       style={{ fontFamily: sansFont }}
     >
-      <PageHeader onAction={onBack} actionLabel="Zurück" />
+      <PageHeader onAction={onBack} actionLabel="Zur\u00fcck" />
       <main
         className="flex-1 w-full py-12"
         style={{ paddingLeft: "7cm", paddingRight: "7cm" }}
@@ -441,11 +454,11 @@ function MusterschreibenPage({
             className="font-bold mb-8"
             style={{
               fontFamily: sansFont,
-              fontSize: "1.025rem",
+              fontSize: "1.7425rem",
               lineHeight: 1.2,
             }}
           >
-            Ihr persönlicher Bereich,{" "}
+            Ihr pers\u00f6nlicher Bereich,{" "}
             <span style={{ color: nicknameYellow }}>{nickname}</span> bei
             SichereDeineRechte.
           </h1>
@@ -454,36 +467,37 @@ function MusterschreibenPage({
             style={{ fontFamily: sansFont, fontSize: "1.625rem" }}
           >
             <p className="font-semibold" style={{ fontSize: "3.5rem" }}>
-              Musterschreiben / administrative Prozesse freischalten
+              Musterschreiben
             </p>
             <p style={{ color: lightGrey7035 }}>
               Erhalten Sie Zugang zu professionellen Musterschreiben und
-              administrativen Prozessen für den Umgang mit sogenannten Behörden,
-              Ämtern oder Gerichten. Unsere Vorlagen helfen Ihnen, Ihre Rechte
-              zu wahren.
+              administrativen Prozessen f\u00fcr den Umgang mit sogenannten
+              Beh\u00f6rden, \u00c4mtern oder Gerichten. Unsere Vorlagen helfen
+              Ihnen, Ihre Rechte zu wahren.
             </p>
             <ul
               className="space-y-3 list-none pl-4"
               style={{ color: lightGrey7035 }}
             >
               <li>
-                ✓ Zurückweisung von mangelhaften Behörden-, Amts- oder
-                Gerichtsschreiben (sogenannte Beschlüsse, Bescheide, Urteile,
-                Zahlungsaufforderungen etc.)
+                \u2713 Zur\u00fcckweisung von mangelhaften Beh\u00f6rden-, Amts-
+                oder Gerichtsschreiben (sogenannte Beschl\u00fcsse, Bescheide,
+                Urteile, Zahlungsaufforderungen etc.)
               </li>
               <li>
-                ✓ Annahme von behördlichen, amtlichen oder gerichtlichen
-                Forderung (sogenannte Bußgelder, Steuern etc.) unter Vorbehalt
-                der Rechtmäßigkeit.
+                \u2713 Annahme von beh\u00f6rdlichen, amtlichen oder
+                gerichtlichen Forderung (sogenannte Bu\u00dfgelder, Steuern
+                etc.) unter Vorbehalt der Rechtm\u00e4\u00dfigkeit.
               </li>
               <li>
-                ✓ Annahme von behördlichen, amtlichen oder gerichtlichen
-                Forderung (sogenannte Bußgelder, Steuern etc.) unter Vorbehalt
-                der Rechtmäßigkeit in Verbindung mit einem Gegenangebot.
+                \u2713 Annahme von beh\u00f6rdlichen, amtlichen oder
+                gerichtlichen Forderung (sogenannte Bu\u00dfgelder, Steuern
+                etc.) unter Vorbehalt der Rechtm\u00e4\u00dfigkeit in Verbindung
+                mit einem Gegenangebot.
               </li>
             </ul>
             <p className="font-semibold" style={{ color: lightGrey7035 }}>
-              Bezahlung sicher per Kryptowährung (ICP, BTC, ETH, XRP, SOL).
+              Bezahlung sicher per Kryptow\u00e4hrung (ICP, BTC, ETH, XRP, SOL).
             </p>
           </div>
           <div className="mt-12 flex justify-center">
@@ -571,7 +585,6 @@ export function MembersPage() {
           </Button>
         </div>
       </header>
-
       <main
         className="flex-1 w-full py-12"
         style={{ paddingLeft: "7cm", paddingRight: "7cm" }}
@@ -611,13 +624,13 @@ export function MembersPage() {
             >
               Willkommen,{" "}
               <span style={{ color: nicknameYellow }}>{user?.nickname}</span>{" "}
-              bei SDR – SichereDeineRechte!
+              bei SDR \u2013 SichereDeineRechte!
             </h1>
             <p
               className="text-muted-foreground mt-2"
               style={{ fontFamily: sansFont, fontSize: "1.25rem" }}
             >
-              Ihr persönlicher Bereich bei SichereDeineRechte.
+              Ihr pers\u00f6nlicher Bereich bei SichereDeineRechte.
             </p>
           </div>
           <div
@@ -625,23 +638,23 @@ export function MembersPage() {
             style={{ fontFamily: sansFont, fontSize: "1.625rem" }}
           >
             <p>
-              Vielen Dank für Ihre Registrierung und Ihr Interesse an den
+              Vielen Dank f\u00fcr Ihre Registrierung und Ihr Interesse an den
               Informationen von SDR! Hier informieren sich Menschen, die das
-              bestehende System hinterfragen und nach praktischen Lösungen
+              bestehende System hinterfragen und nach praktischen L\u00f6sungen
               suchen, wie man selbstbestimmt mit mangelhaften sogenannten
-              Behörden-, Amts- oder Gerichtsschreiben umgeht und seine Rechte
-              wahrt.
+              Beh\u00f6rden-, Amts- oder Gerichtsschreiben umgeht und seine
+              Rechte wahrt.
             </p>
             <p>
               Auf unserer Plattform finden Sie hilfreiche Informationen,
               inspirierende Inhalte und bei Bedarf praktische Musterschreiben
               sowie administrative Prozesse, die Ihnen den Umgang mit
-              sogenannten Behörden, Ämtern oder Gerichten erleichtern. Stöbern
-              Sie, probieren Sie aus und nutzen Sie die Möglichkeiten, die Ihnen
-              unsere Seite bietet.
+              sogenannten Beh\u00f6rden, \u00c4mtern oder Gerichten erleichtern.
+              St\u00f6bern Sie, probieren Sie aus und nutzen Sie die
+              M\u00f6glichkeiten, die Ihnen unsere Seite bietet.
             </p>
             <p className="font-semibold">
-              Wir wünschen Ihnen viel Freude und wertvolle Erfahrungen!
+              Wir w\u00fcnschen Ihnen viel Freude und wertvolle Erfahrungen!
             </p>
             <p className="font-semibold">Ihr SDR-Team</p>
           </div>
@@ -650,7 +663,7 @@ export function MembersPage() {
             className="rounded-2xl px-10 py-5 text-xl font-bold border-0 h-auto text-white"
             style={{ backgroundColor: oceanBlue, fontFamily: sansFont }}
           >
-            Musterschreiben freischalten
+            Musterschreiben
           </Button>
         </motion.div>
       </main>

@@ -8,16 +8,16 @@ import { useAuth } from "../context/AuthContext";
 import { AdminPage } from "./AdminPage";
 
 const heroText1 =
-  "Fühlen Sie sich von Forderungen sogenannter Behörden oder Ämter unter Druck gesetzt? Fragen Sie sich, ob diese Ansprüche überhaupt rechtmäßig sind? Reagieren Sie noch – oder agieren Sie schon bewusst und informiert? Ist Ihnen klar, dass Sie durch gezieltes Agieren die Verantwortlichen hinter solchen Forderungen in die Haftung nehmen können? Möchten Sie wissen, wie Sie eine Zahlung leisten können, ohne dabei Ihre Rechte aufzugeben? Suchen Sie nach einer Möglichkeit, unter Vorbehalt zu handeln, ohne sich unwissentlich zu verpflichten? Und stellen Sie sich die entscheidende Frage: Gibt es einen sicheren Weg, mit solchen Forderungen umzugehen, ohne Nachteile zu riskieren?";
+  "F\u00fchlen Sie sich von Forderungen sogenannter Beh\u00f6rden oder \u00c4mter unter Druck gesetzt? Fragen Sie sich, ob diese Anspr\u00fcche \u00fcberhaupt rechtm\u00e4\u00dfig sind? Reagieren Sie noch \u2013 oder agieren Sie schon bewusst und informiert? Ist Ihnen klar, dass Sie durch gezieltes Agieren die Verantwortlichen hinter solchen Forderungen in die Haftung nehmen k\u00f6nnen? M\u00f6chten Sie wissen, wie Sie eine Zahlung leisten k\u00f6nnen, ohne dabei Ihre Rechte aufzugeben? Suchen Sie nach einer M\u00f6glichkeit, unter Vorbehalt zu handeln, ohne sich unwissentlich zu verpflichten? Und stellen Sie sich die entscheidende Frage: Gibt es einen sicheren Weg, mit solchen Forderungen umzugehen, ohne Nachteile zu riskieren?";
 
 const heroText2 =
-  "Stehen Sie vor genau diesen Fragen und suchen nach klaren, verständlichen Antworten? Möchten Sie nicht länger im Ungewissen bleiben, sondern Ihre Situation souverän einschätzen können? Fragen Sie sich, wie Sie strukturiert und rechtssicher mit solchen Forderungen umgehen können?";
+  "Stehen Sie vor genau diesen Fragen und suchen nach klaren, verst\u00e4ndlichen Antworten? M\u00f6chten Sie nicht l\u00e4nger im Ungewissen bleiben, sondern Ihre Situation souver\u00e4n einsch\u00e4tzen k\u00f6nnen? Fragen Sie sich, wie Sie strukturiert und rechtssicher mit solchen Forderungen umgehen k\u00f6nnen?";
 
 const heroText3 =
-  "SDR unterstützt Sie dabei, komplexe Sachverhalte rund um sogenannte behördliche Forderungen verständlich aufzubereiten und zeigt Ihnen professionelle Wege auf, wie Sie informiert und überlegt handeln können. Statt Unsicherheit erhalten Sie Orientierung – statt bloßer Reaktion eine klare Strategie.";
+  "SDR unterst\u00fctzt Sie dabei, komplexe Sachverhalte rund um sogenannte beh\u00f6rdliche Forderungen verst\u00e4ndlich aufzubereiten und zeigt Ihnen professionelle Wege auf, wie Sie informiert und \u00fcberlegt handeln k\u00f6nnen. Statt Unsicherheit erhalten Sie Orientierung \u2013 statt blo\u00dfer Reaktion eine klare Strategie.";
 
 const heroText4 =
-  "Sind Sie bereit, Ihre nächsten Schritte nicht dem Zufall zu überlassen, sondern auf fundiertes Wissen und durchdachte Vorgehensweisen zu setzen?";
+  "Sind Sie bereit, Ihre n\u00e4chsten Schritte nicht dem Zufall zu \u00fcberlassen, sondern auf fundiertes Wissen und durchdachte Vorgehensweisen zu setzen?";
 
 const sansFont = "'Liberation Sans', Arial, Helvetica, sans-serif";
 const z003Font = "'Z003', 'URW Chancery L', 'Palatino Linotype', cursive";
@@ -124,7 +124,7 @@ export function HomePage() {
                   className="text-primary text-sm tracking-widest uppercase font-semibold"
                   style={{ fontFamily: sansFont }}
                 >
-                  Ihre Rechte. Ihre Stärke.
+                  Ihre Rechte. Ihre St\u00e4rke.
                 </span>
                 <div className="h-px flex-1 bg-primary/40" />
               </div>
@@ -175,7 +175,7 @@ export function HomePage() {
                   <span className="text-yellow-400">SDR</span>
                   <span className="text-white/80 font-normal">
                     {" "}
-                    – SichereDeineRechte{" "}
+                    \u2013 SichereDeineRechte{" "}
                   </span>
                   <span className="text-white/80 font-bold">an.</span>
                 </p>
@@ -210,21 +210,22 @@ export function HomePage() {
                 className="italic"
                 style={{
                   fontFamily: z003Font,
-                  fontSize: "3.825rem",
-                  color: oceanBlue,
+                  fontSize: "2.678rem",
+                  color: "#FFD700",
                 }}
               >
-                „Mann kann den Wind nicht ändern, aber die Segel anders setzen.“
+                \u201eMann kann den Wind nicht \u00e4ndern, aber die Segel
+                anders setzen.\u201c
               </p>
               <p
                 className="mt-2"
                 style={{
                   fontFamily: z003Font,
-                  fontSize: "2.125rem",
-                  color: oceanBlue,
+                  fontSize: "1.4875rem",
+                  color: "#FFD700",
                 }}
               >
-                – Autor unbekannt
+                \u2013 Autor unbekannt
               </p>
             </motion.div>
           </div>
@@ -247,7 +248,7 @@ export function HomePage() {
                 {
                   icon: <Lock className="inline h-10 w-10 text-primary" />,
                   title: "Dezentral & Sicher",
-                  desc: "Ihr Daten auf dem Internet Computer – zensurresistent und dezentral",
+                  desc: "Ihr Daten auf dem Internet Computer \u2013 zensurresistent und dezentral",
                 },
               ].map((item, i) => (
                 <motion.div
@@ -292,7 +293,7 @@ export function HomePage() {
               <span className="text-white/70 text-xs">SichereDeineRechte</span>
             </div>
             <div className="text-center text-xs">
-              © 2026 SichereDeineRechte. Alle Rechte vorbehalten.
+              \u00a9 2026 SichereDeineRechte. Alle Rechte vorbehalten.
             </div>
             <div className="flex items-center gap-2 text-xs">
               <span>
@@ -338,7 +339,7 @@ export function HomePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <button
             type="button"
-            aria-label="Schließen"
+            aria-label="Schlie\u00dfen"
             className="absolute inset-0 w-full h-full cursor-default"
             onClick={closeAdminModal}
           />
