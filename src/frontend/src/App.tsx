@@ -1,71 +1,55 @@
-import { Toaster } from "@/components/ui/sonner";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  RouterProvider,
-  createRootRoute,
-  createRoute,
-  createRouter,
-} from "@tanstack/react-router";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import { AuthProvider } from "./context/AuthContext";
-import { HomePage } from "./pages/HomePage";
-import { MembersPage } from "./pages/MembersPage";
-import { ProfilePage } from "./pages/ProfilePage";
-
-const queryClient = new QueryClient();
-
-const rootRoute = createRootRoute({
-  component: () => <Outlet />,
-});
-
-const indexRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/",
-  component: HomePage,
-});
-
-const membersRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/members",
-  component: () => (
-    <ProtectedRoute>
-      <MembersPage />
-    </ProtectedRoute>
-  ),
-});
-
-const profileRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/profile",
-  component: () => (
-    <ProtectedRoute>
-      <ProfilePage />
-    </ProtectedRoute>
-  ),
-});
-
-const routeTree = rootRoute.addChildren([
-  indexRoute,
-  membersRoute,
-  profileRoute,
-]);
-
-const router = createRouter({ routeTree });
-
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
+import React from "react";
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <RouterProvider router={router} />
-        <Toaster richColors position="top-right" />
-      </AuthProvider>
-    </QueryClientProvider>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#1a1a2e",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: "Liberation Sans, Arial, sans-serif",
+        color: "#ffffff",
+        textAlign: "center",
+        padding: "2rem",
+      }}
+    >
+      <div style={{ marginBottom: "2rem" }}>
+        <span
+          style={{ color: "#FFD700", fontWeight: "bold", fontSize: "2.5rem" }}
+        >
+          SDR
+        </span>
+        <br />
+        <span
+          style={{ color: "#ffffff", fontSize: "1.2rem", fontWeight: "normal" }}
+        >
+          SichereDeineRechte
+        </span>
+      </div>
+      <h1
+        style={{
+          fontSize: "1.8rem",
+          fontWeight: "bold",
+          marginBottom: "1rem",
+          color: "#ffffff",
+        }}
+      >
+        Diese Seite ist vorübergehend nicht verfügbar.
+      </h1>
+      <p
+        style={{
+          fontSize: "1rem",
+          color: "#cccccc",
+          maxWidth: "500px",
+          lineHeight: "1.6",
+        }}
+      >
+        Wir führen derzeit Wartungsarbeiten durch. Bitte versuchen Sie es später
+        erneut.
+      </p>
+    </div>
   );
 }
